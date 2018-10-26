@@ -53,6 +53,7 @@ import net.runelite.client.ui.overlay.components.BackgroundComponent;
 import net.runelite.client.ui.overlay.components.TextComponent;
 import net.runelite.client.util.StackFormatter;
 
+
 public class GroundItemsOverlay extends Overlay
 {
 	private static final int MAX_DISTANCE = 2500;
@@ -253,6 +254,19 @@ public class GroundItemsOverlay extends Overlay
 						.append(" (")
 						.append(StackFormatter.quantityToStackSize(price))
 						.append(" gp)");
+				}
+			}
+
+			if (config.tagProfitableAlchables())
+			{
+				final int naturePrice = plugin.getNaturePrice();
+
+				if (naturePrice > 0)
+				{
+					if (item.getHaPrice() - naturePrice > 0)
+					{
+						itemStringBuilder.append(config.profitablesTag());
+					}
 				}
 			}
 

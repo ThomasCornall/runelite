@@ -150,6 +150,28 @@ public interface GroundItemsConfig extends Config
 	}
 
 	@ConfigItem(
+		keyName = "tagProfitableAlchables",
+		name = "Tag Profitable Alchables",
+		description = "Configures whether items that can be alched for profit are tagged",
+		position = 8
+	)
+	default boolean tagProfitableAlchables()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "profitableTag",
+		name = "Profitables Tag",
+		description = "Configures the string to append to the end of the items name if it alchs for a profit",
+		position = 8
+	)
+	default String profitablesTag()
+	{
+		return " (*)";
+	}
+
+	@ConfigItem(
 		keyName = "itemHighlightMode",
 		name = "Item Highlight Mode",
 		description = "Configures how ground items will be highlighted",

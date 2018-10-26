@@ -508,6 +508,8 @@ public class GroundItemsPlugin extends Plugin
 				lastEntry.setTarget(lastEntry.getTarget() + " (" + quantity + ")");
 			}
 
+			lastEntry.setTarget(lastEntry.getTarget() + " (*)");
+
 			client.setMenuEntries(menuEntries);
 		}
 	}
@@ -597,6 +599,11 @@ public class GroundItemsPlugin extends Plugin
 		{
 			setHotKeyPressed(false);
 		}
+	}
+
+	int getNaturePrice()
+	{
+		return itemManager.getItemPrice(ItemID.NATURE_RUNE);
 	}
 
 	private void notifyHighlightedItem(GroundItem item)
