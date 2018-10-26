@@ -259,14 +259,9 @@ public class GroundItemsOverlay extends Overlay
 
 			if (config.tagProfitableAlchables())
 			{
-				final int naturePrice = plugin.getNaturePrice();
-
-				if (naturePrice > 0)
+				if (plugin.isItemAlchProfitable(item.getItemId()))
 				{
-					if (item.getHaPrice() - naturePrice > 0)
-					{
-						itemStringBuilder.append(config.profitablesTag());
-					}
+					itemStringBuilder.append(config.profitablesTag());
 				}
 			}
 

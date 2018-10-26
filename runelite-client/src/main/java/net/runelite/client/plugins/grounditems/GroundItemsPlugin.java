@@ -508,7 +508,13 @@ public class GroundItemsPlugin extends Plugin
 				lastEntry.setTarget(lastEntry.getTarget() + " (" + quantity + ")");
 			}
 
-			lastEntry.setTarget(lastEntry.getTarget() + " (*)");
+			if (config.tagProfitableAlchables())
+			{
+				if (isItemAlchProfitable(realItemId))
+				{
+					lastEntry.setTarget(lastEntry.getTarget() + (" (*)"));
+				}
+			}
 
 			client.setMenuEntries(menuEntries);
 		}
@@ -601,7 +607,15 @@ public class GroundItemsPlugin extends Plugin
 		}
 	}
 
-	int getNaturePrice()
+	boolean isItemAlchProfitable(int itemId)
+	{
+		final ItemComposition itemComposition = itemManager.getItemComposition(itemId);
+		final int haPrice = Math.round(itemComposition.getPrice() * HIGH_ALCHEMY_CONSTANT);
+
+		return haPrice - getNaturePrice() > 0;
+	}
+
+	private int getNaturePrice()
 	{
 		return itemManager.getItemPrice(ItemID.NATURE_RUNE);
 	}
