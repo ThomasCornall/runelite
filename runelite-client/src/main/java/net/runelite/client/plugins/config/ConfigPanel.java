@@ -113,6 +113,8 @@ public class ConfigPanel extends PluginPanel
 	private final RuneLiteConfig runeLiteConfig;
 	private final ChatColorConfig chatColorConfig;
 	private final List<PluginListItem> pluginList = new ArrayList<>();
+	private final List<PluginListItem> enabledPlugins = new ArrayList<>();
+	private final List<PluginListItem> disabledPlugins = new ArrayList<>();
 
 	private final IconTextField searchBar = new IconTextField();
 	private final JPanel topPanel;
@@ -204,6 +206,7 @@ public class ConfigPanel extends PluginPanel
 
 				final PluginListItem listItem = new PluginListItem(this, plugin, descriptor, config, configDescriptor);
 				listItem.setPinned(pinnedPlugins.contains(listItem.getName()));
+
 				pluginList.add(listItem);
 			});
 
@@ -220,11 +223,14 @@ public class ConfigPanel extends PluginPanel
 		chatColor.setPinned(pinnedPlugins.contains(CHAT_COLOR_PLUGIN));
 		pluginList.add(chatColor);
 
-		pluginList.sort(Comparator.comparing(PluginListItem::getName));
+		//pluginList.sort(Comparator.comparing(PluginListItem::getName));
 	}
 
 	void refreshPluginList()
 	{
+		enabledPlugins.clear();
+		disabledPlugins.clear();
+
 		// update enabled / disabled status of all items
 		pluginList.forEach(listItem ->
 		{
@@ -234,6 +240,28 @@ public class ConfigPanel extends PluginPanel
 				listItem.setPluginEnabled(pluginManager.isPluginEnabled(plugin));
 			}
 		});
+
+		for (PluginListItem item: pluginList)
+		{
+			if (item.getPlugin() == null)
+			{
+				// Add plugins to enabled list if null plugin (This is for the runelite config plugin and chat color)
+				enabledPlugins.add(item);
+				continue;
+			}
+
+			if (pluginManager.isPluginEnabled(item.getPlugin()))
+			{
+				enabledPlugins.add(item);
+			}
+			else
+			{
+				disabledPlugins.add(item);
+			}
+		}
+
+		enabledPlugins.sort(Comparator.comparing(PluginListItem::getName));
+		disabledPlugins.sort(Comparator.comparing(PluginListItem::getName));
 
 		if (showingPluginList)
 		{
@@ -264,7 +292,9 @@ public class ConfigPanel extends PluginPanel
 	{
 		final String text = searchBar.getText();
 
-		pluginList.forEach(mainPanel::remove);
+		//pluginList.forEach(mainPanel::remove);
+		enabledPlugins.forEach(mainPanel::remove);
+		disabledPlugins.forEach(mainPanel::remove);
 
 		showMatchingPlugins(true, text);
 		showMatchingPlugins(false, text);
@@ -276,7 +306,9 @@ public class ConfigPanel extends PluginPanel
 	{
 		if (text.isEmpty())
 		{
-			pluginList.stream().filter(item -> pinned == item.isPinned()).forEach(mainPanel::add);
+			//pluginList.stream().filter(item -> pinned == item.isPinned()).forEach(mainPanel::add);
+			enabledPlugins.stream().filter(item -> pinned == item.isPinned()).forEach(mainPanel::add);
+			disabledPlugins.stream().filter(item -> pinned == item.isPinned()).forEach(mainPanel::add);
 			return;
 		}
 
