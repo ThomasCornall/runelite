@@ -541,6 +541,10 @@ public class MenuEntrySwapperPlugin extends Plugin
 		{
 			swap("use", option, target, true);
 		}
+		else if (config.swapMake() && option.equals("make-1"))
+		{
+			swap("make-all", option, target, true);
+		}
 	}
 
 	@Subscribe
