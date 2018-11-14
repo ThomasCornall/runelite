@@ -545,6 +545,13 @@ public class MenuEntrySwapperPlugin extends Plugin
 		{
 			swap("make-all", option, target, true);
 		}
+		else if (target.contains("dueling") && option.equals("remove"))
+		{
+			if (client.getLocalPlayer().getWorldLocation().getRegionID() == 14231) // barrows chest room
+			{
+				swap("clan wars", option, target, true);
+			}
+		}
 	}
 
 	@Subscribe
