@@ -686,6 +686,11 @@ public class WidgetID
 		static final int TELEPORT_BUTTON = 31;
 	}
 
+	static class SpellBook
+	{
+		static final int WIDGET_CONTAINER = 3;
+	}
+
 	static class StandardSpellBook
 	{
 		static final int LUMBRIDGE_HOME_TELEPORT = 4;
