@@ -29,7 +29,10 @@ import com.google.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
 import net.runelite.api.NPC;
-import net.runelite.api.queries.NPCQuery;
+import net.runelite.api.events.GameTick;
+import net.runelite.api.events.NpcDespawned;
+import net.runelite.api.events.NpcSpawned;
+import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.plugins.zulrah.overlays.ZulrahRotationOverlay;
@@ -40,11 +43,7 @@ import net.runelite.client.plugins.zulrah.rotation.ZulrahRotationFour;
 import net.runelite.client.plugins.zulrah.rotation.ZulrahRotationOne;
 import net.runelite.client.plugins.zulrah.rotation.ZulrahRotationThree;
 import net.runelite.client.plugins.zulrah.rotation.ZulrahRotationTwo;
-import net.runelite.client.task.Schedule;
 import net.runelite.client.ui.overlay.OverlayManager;
-import net.runelite.client.util.QueryRunner;
-
-import java.time.temporal.ChronoUnit;
 
 @PluginDescriptor(
 	name = "Zulrah"
@@ -60,6 +59,8 @@ public class ZulrahPlugin extends Plugin
 		new ZulrahRotationFour()
 	};
 
+	private NPC zulrah;
+
 	@Inject
 	private Client client;
 
@@ -71,9 +72,6 @@ public class ZulrahPlugin extends Plugin
 
 	@Inject
 	private ZulrahRotationOverlay rotationOverlay;
-
-	@Inject
-	private QueryRunner queryRunner;
 
 	private ZulrahInstance instance;
 
@@ -90,13 +88,9 @@ public class ZulrahPlugin extends Plugin
 		overlayManager.add(rotationOverlay);
 	}
 
-	@Schedule(
-		period = 600,
-		unit = ChronoUnit.MILLIS
-	)
-	public void update()
+	@Subscribe
+	public void onGameTick(GameTick event)
 	{
-		NPC zulrah = findZulrah();
 		if (zulrah == null)
 		{
 			if (instance != null)
@@ -149,10 +143,26 @@ public class ZulrahPlugin extends Plugin
 		}
 	}
 
-	private NPC findZulrah()
+	@Subscribe
+	public void onNpcSpawned(NpcSpawned npcSpawned)
 	{
-		NPC[] result = queryRunner.runQuery(new NPCQuery().nameEquals("Zulrah"));
-		return result.length == 1 ? result[0] : null;
+		NPC npc = npcSpawned.getNpc();
+
+		if (npc.getName().equalsIgnoreCase("zulrah"))
+		{
+			zulrah = npc;
+		}
+	}
+
+	@Subscribe
+	public void onNpcDespawned(NpcDespawned npcDespawned)
+	{
+		NPC npc = npcDespawned.getNpc();
+
+		if (npc.getName().equalsIgnoreCase("zulrah"))
+		{
+			zulrah = null;
+		}
 	}
 
 	public ZulrahInstance getInstance()
