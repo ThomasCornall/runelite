@@ -143,10 +143,10 @@ public class ZulrahPhase
 	public String toString()
 	{
 		return "ZulrahPhase{" +
-		  "zulrahLocation=" + zulrahLocation +
-		  ", type=" + type +
-		  ", jad=" + jad +
-		  '}';
+			"zulrahLocation=" + zulrahLocation +
+			", type=" + type +
+			", jad=" + jad +
+			'}';
 	}
 
 	public Color getColor()

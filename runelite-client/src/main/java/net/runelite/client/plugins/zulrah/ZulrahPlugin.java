@@ -41,27 +41,24 @@ import net.runelite.client.plugins.zulrah.rotation.ZulrahRotationOne;
 import net.runelite.client.plugins.zulrah.rotation.ZulrahRotationThree;
 import net.runelite.client.plugins.zulrah.rotation.ZulrahRotationTwo;
 import net.runelite.client.task.Schedule;
-import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayManager;
 import net.runelite.client.util.QueryRunner;
 
 import java.time.temporal.ChronoUnit;
-import java.util.Arrays;
-import java.util.Collection;
 
 @PluginDescriptor(
-  name = "Zulrah"
+	name = "Zulrah"
 )
 @Slf4j
 public class ZulrahPlugin extends Plugin
 {
 	private ZulrahRotation[] rotations = new ZulrahRotation[]
-	  {
+	{
 		new ZulrahRotationOne(),
 		new ZulrahRotationTwo(),
 		new ZulrahRotationThree(),
 		new ZulrahRotationFour()
-	  };
+	};
 
 	@Inject
 	private Client client;
@@ -94,8 +91,8 @@ public class ZulrahPlugin extends Plugin
 	}
 
 	@Schedule(
-	  period = 600,
-	  unit = ChronoUnit.MILLIS
+		period = 600,
+		unit = ChronoUnit.MILLIS
 	)
 	public void update()
 	{
