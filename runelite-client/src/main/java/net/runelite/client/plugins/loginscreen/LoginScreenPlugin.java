@@ -30,6 +30,7 @@ import java.awt.Toolkit;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import javax.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
@@ -43,6 +44,9 @@ import net.runelite.client.input.KeyListener;
 import net.runelite.client.input.KeyManager;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
+import net.runelite.client.ui.ClientToolbar;
+import net.runelite.client.ui.NavigationButton;
+import net.runelite.client.util.ImageUtil;
 import net.runelite.client.util.OSType;
 
 @PluginDescriptor(
@@ -59,18 +63,37 @@ public class LoginScreenPlugin extends Plugin implements KeyListener
 	private Client client;
 
 	@Inject
+	private ClientToolbar clientToolbar;
+
+	@Inject
 	private LoginScreenConfig config;
 
 	@Inject
 	private KeyManager keyManager;
+
+	private NavigationButton navButton;
+	private AccountsPanel accountsPanel;
 
 	private String usernameCache;
 
 	@Override
 	protected void startUp() throws Exception
 	{
+		accountsPanel = injector.getInstance(AccountsPanel.class);
+
 		applyUsername();
 		keyManager.registerKeyListener(this);
+
+		final BufferedImage icon = ImageUtil.getResourceStreamFromClass(getClass(), "rs_character_default.png");
+
+		navButton = NavigationButton.builder()
+				.tooltip("Account Management")
+				.icon(icon)
+				.priority(10)
+				.panel(accountsPanel)
+				.build();
+
+		clientToolbar.addNavigation(navButton);
 	}
 
 	@Override
@@ -82,6 +105,8 @@ public class LoginScreenPlugin extends Plugin implements KeyListener
 		}
 
 		keyManager.unregisterKeyListener(this);
+
+		clientToolbar.removeNavigation(navButton);
 	}
 
 	@Provides
