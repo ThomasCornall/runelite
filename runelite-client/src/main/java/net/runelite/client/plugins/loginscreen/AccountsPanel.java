@@ -40,13 +40,12 @@ class AccountsPanel extends PluginPanel
 
 	private void createPanel()
 	{
-		accountsContainer = createAccountsPanel();
-		add(accountsContainer);
+		add(accountsContainer = createAccountsContainer());
 
-		populateAccountsPanel();
+		populateAccountsContainer();
 	}
 
-	private void populateAccountsPanel()
+	private void populateAccountsContainer()
 	{
 		accountsContainer.removeAll();
 
@@ -55,7 +54,7 @@ class AccountsPanel extends PluginPanel
 		accounts.keySet().forEach(account ->
 		{
 			final String[] credentials = accounts.get(account);
-			accountsContainer.add(createAccountButton(account, credentials[0], credentials[1]));
+			accountsContainer.add(createAccountPanel(account, credentials[0], credentials[1]));
 		});
 
 		revalidate();
@@ -63,19 +62,18 @@ class AccountsPanel extends PluginPanel
 	}
 
 	// Create the container panel for the accounts
-	private JPanel createAccountsPanel()
+	private JPanel createAccountsContainer()
 	{
 		final JPanel container = new JPanel();
-		container.setBackground(ColorScheme.DARK_GRAY_COLOR);
 		container.setLayout(new GridLayout(2, 1));
 		return container;
 	}
 
 	// Create the panel for each account
-	private JPanel createAccountButton(String name, String user, String pass)
+	private JPanel createAccountPanel(String name, String user, String pass)
 	{
 		final JPanel container = new JPanel();
-		container.setBackground(ColorScheme.DARKER_GRAY_COLOR);
+		container.setBackground(ColorScheme.DARK_GRAY_COLOR);
 
 		final JLabel label = new JLabel(name);
 		final JButton setButton = new JButton("Login");
