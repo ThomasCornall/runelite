@@ -27,16 +27,21 @@ package net.runelite.client.plugins.menuentryswapper;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.inject.Provides;
+
 import java.util.Set;
 import javax.inject.Inject;
 import lombok.Getter;
 import lombok.Setter;
 import net.runelite.api.Client;
+import net.runelite.api.Constants;
+import net.runelite.api.DecorativeObject;
 import net.runelite.api.GameState;
 import net.runelite.api.ItemComposition;
 import net.runelite.api.MenuAction;
 import net.runelite.api.MenuEntry;
 import net.runelite.api.NPC;
+import net.runelite.api.Scene;
+import net.runelite.api.Tile;
 import net.runelite.api.events.ConfigChanged;
 import net.runelite.api.events.FocusChanged;
 import net.runelite.api.events.MenuEntryAdded;
@@ -550,6 +555,39 @@ public class MenuEntrySwapperPlugin extends Plugin
 			if (client.getLocalPlayer().getWorldLocation().getRegionID() == 14231) // barrows chest room
 			{
 				swap("clan wars", option, target, true);
+			}
+		}
+
+		final Scene scene = client.getScene();
+		final Tile[][][] tiles = scene.getTiles();
+
+		for (int x = 0; x < Constants.SCENE_SIZE; x++)
+		{
+			for (int y = 0; y < Constants.SCENE_SIZE; y++)
+			{
+				final Tile tile = tiles[client.getPlane()][x][y];
+
+				if (tile == null) continue;
+
+				final DecorativeObject dec = tile.getDecorativeObject();
+
+				if (dec == null) continue;
+
+				if (dec.getId() == 15394 || dec.getId() == 31986)
+				{
+					final MenuEntry[] entries = client.getMenuEntries();
+					for (int i = 0; i < entries.length; i++)
+					{
+						final MenuEntry entry = entries[i];
+
+						if (entry.getOption().equalsIgnoreCase("examine"))
+						{
+							entries[i] = null;
+							client.setMenuEntries(entries);
+							break;
+						}
+					}
+				}
 			}
 		}
 	}
