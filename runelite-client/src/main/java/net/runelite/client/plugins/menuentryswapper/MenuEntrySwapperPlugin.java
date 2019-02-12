@@ -34,7 +34,6 @@ import java.util.Set;
 import javax.inject.Inject;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
 import net.runelite.api.Constants;
 import net.runelite.api.DecorativeObject;
@@ -70,7 +69,6 @@ import org.apache.commons.lang3.ArrayUtils;
 	tags = {"npcs", "inventory", "items", "objects"},
 	enabledByDefault = false
 )
-@Slf4j
 public class MenuEntrySwapperPlugin extends Plugin
 {
 	private static final String CONFIGURE = "Configure";
@@ -594,10 +592,6 @@ public class MenuEntrySwapperPlugin extends Plugin
 					}
 
 					Collections.reverse(newEntries);
-					for (MenuEntry m : newEntries)
-					{
-						log.info(m.getTarget() + "  :   " + m.getOption());
-					}
 					client.setMenuEntries(newEntries.stream().toArray(MenuEntry[]::new));
 				}
 			}
