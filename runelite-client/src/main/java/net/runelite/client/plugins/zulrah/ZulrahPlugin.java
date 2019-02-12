@@ -29,9 +29,8 @@ import com.google.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
 import net.runelite.api.NPC;
+import net.runelite.api.NPCComposition;
 import net.runelite.api.events.GameTick;
-import net.runelite.api.events.NpcDespawned;
-import net.runelite.api.events.NpcSpawned;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
@@ -44,6 +43,8 @@ import net.runelite.client.plugins.zulrah.rotation.ZulrahRotationOne;
 import net.runelite.client.plugins.zulrah.rotation.ZulrahRotationThree;
 import net.runelite.client.plugins.zulrah.rotation.ZulrahRotationTwo;
 import net.runelite.client.ui.overlay.OverlayManager;
+
+import java.util.List;
 
 @PluginDescriptor(
 	name = "Zulrah"
@@ -91,6 +92,8 @@ public class ZulrahPlugin extends Plugin
 	@Subscribe
 	public void onGameTick(GameTick event)
 	{
+		zulrah = findZulrah();
+
 		if (zulrah == null)
 		{
 			if (instance != null)
@@ -143,26 +146,20 @@ public class ZulrahPlugin extends Plugin
 		}
 	}
 
-	@Subscribe
-	public void onNpcSpawned(NpcSpawned npcSpawned)
+	private NPC findZulrah()
 	{
-		NPC npc = npcSpawned.getNpc();
+		final List<NPC> npcs = client.getNpcs();
 
-		if (npc.getName().equalsIgnoreCase("zulrah"))
+		for (NPC npc : npcs)
 		{
-			zulrah = npc;
+			final NPCComposition npcComp = npc.getComposition();
+			if (npcComp.getName().equalsIgnoreCase("zulrah"))
+			{
+				return npc;
+			}
 		}
-	}
 
-	@Subscribe
-	public void onNpcDespawned(NpcDespawned npcDespawned)
-	{
-		NPC npc = npcDespawned.getNpc();
-
-		if (npc.getName().equalsIgnoreCase("zulrah"))
-		{
-			zulrah = null;
-		}
+		return null;
 	}
 
 	public ZulrahInstance getInstance()
