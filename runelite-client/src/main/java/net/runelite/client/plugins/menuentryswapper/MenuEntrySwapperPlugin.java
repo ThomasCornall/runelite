@@ -552,10 +552,6 @@ public class MenuEntrySwapperPlugin extends Plugin
 				swap("clan wars", option, target, true);
 			}
 		}
-		else if (target.equalsIgnoreCase("mythical cape") && option.equals("teleport"))
-		{
-			swap("remove", option, target, true);
-		}
 	}
 
 	@Subscribe
