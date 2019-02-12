@@ -28,6 +28,8 @@ package net.runelite.client.plugins.menuentryswapper;
 import com.google.common.collect.ImmutableSet;
 import com.google.inject.Provides;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Set;
 import javax.inject.Inject;
 import lombok.Getter;
@@ -575,18 +577,22 @@ public class MenuEntrySwapperPlugin extends Plugin
 
 				if (dec.getId() == 15394 || dec.getId() == 31986)
 				{
-					final MenuEntry[] entries = client.getMenuEntries();
-					for (int i = 0; i < entries.length; i++)
+					final MenuEntry[] menuEntries = client.getMenuEntries();
+					final ArrayList<MenuEntry> newEntries = new ArrayList<>(menuEntries.length);
+					for (int i = 0; i < newEntries.size(); i++)
 					{
-						final MenuEntry entry = entries[i];
+						final MenuEntry entry = menuEntries[i];
 
 						if (entry.getOption().equalsIgnoreCase("examine"))
 						{
-							entries[i] = null;
-							client.setMenuEntries(entries);
-							break;
+							continue;
 						}
+
+						newEntries.add(entry);
 					}
+
+					Collections.reverse(newEntries);
+					client.setMenuEntries((MenuEntry[]) newEntries.toArray());
 				}
 			}
 		}
